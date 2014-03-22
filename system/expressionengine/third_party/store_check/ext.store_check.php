@@ -3,7 +3,7 @@
 class Store_check_ext
 {
     public $name = 'Store Check Payments';
-    public $version = '0.0.1';
+    public $version = '1.0.0';
     public $description = 'Example custom payment gateway for Expresso Store';
     public $settings_exist = 'n';
     public $docs_url = 'https://exp-resso.com/docs';
@@ -29,6 +29,12 @@ class Store_check_ext
      */
     public function store_payment_gateways($gateways)
     {
+        // allow multiple extensions to use this hook
+        // see: http://ellislab.com/expressionengine/user-guide/development/extensions.html#multiple-extensions-same-hook
+        if (ee()->extensions->last_call) {
+            $gateways = ee()->extensions->last_call;
+        }
+
         // tell Store about our new payment gateway
         // (this must match the name of your gateway in the Omnipay directory)
         $gateways[] = 'Check';
